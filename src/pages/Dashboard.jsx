@@ -22,78 +22,52 @@ const Dashboard = () => {
     getPosts();
   }, []);
   return (
-    <section class="relative flex">
-      <div class="min-h-screen bg-white md:w-3/4"></div>
-      <div class="min-h-screen bg-blue-500 md:w-2/5"></div>
-
-      <div class="flex flex-col justify-center w-full min-h-screen px-4 py-10 md:fixed md:mx-24">
-        <h1 class="text-2xl font-semibold text-gray-800 capitalize lg:text-3xl">
-          What our <span class="text-blue-500">customers</span> <br /> are
-          saying
-        </h1>
-
-        <div class="grid w-full grid-cols-1 gap-8 mt-8 2xl:grid-cols-4 lg:mt-16 md:grid-cols-2 lg:grid-cols-3">
-          {tweets.map((tweet) => {
-            return (
-              <div class="w-full p-8 bg-white rounded-md shadow-lg">
-                <p class="leading-loose text-gray-500 ">{tweet.message}</p>
-
-                <div class="flex items-center mt-6 -mx-2">
-                  <img
-                    class="object-cover mx-2 rounded-full w-14 h-14"
-                    src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                    alt=""
-                  />
-
-                  <div class="mx-2">
-                    <h1 class="font-semibold text-gray-800">{tweet.comment}</h1>
+    <section className="w-full min-h-screen relative flex justify-center items-center bg-cover bg-[url('https://images.unsplash.com/photo-1465060810938-30bbe7c40e76?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2490&q=80')]">
+      <div className="py-16">
+        <div className="container m-auto px-6 text-gray-600 md:px-12 xl:px-6">
+          <div className="mb-20 space-y-4 px-6 md:px-0">
+            <h2 className="text-center text-2xl font-bold text-white md:text-8xl">
+              Arraiá da Firma!
+            </h2>
+          </div>
+          <div className="md:columns-2 lg:columns-3 gap-8 space-y-8">
+            {tweets.map((tweet) => {
+              return (
+                <div className="aspect-auto p-8 border border-gray-100 rounded-3xl bg-white shadow-2xl shadow-gray-600/10">
+                  <div className="flex gap-4">
+                    <img
+                      className="w-12 h-12 rounded-full"
+                      src="https://pbs.twimg.com/profile_images/1372441824560771075/DTcuXT0Z_400x400.jpg"
+                      alt=""
+                      width=""
+                      height=""
+                      loading="lazy"
+                    />
+                    <div>
+                      <h6 className="text-lg font-medium text-gray-700">
+                        Lucy
+                      </h6>
+                      <p className="text-sm text-gray-500">Mobile dev</p>
+                    </div>
                   </div>
+                  <img
+                    src="https://tuk-cdn.s3.amazonaws.com/can-uploader/testimonials-4-svg1.svg"
+                    alt="commas"
+                  />
+                  <p className="mt-8">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Illum aliquid quo eum quae quos illo earum ipsa doloribus
+                    nostrum minus libero aspernatur laborum cum, a suscipit,
+                    ratione ea totam ullam! Lorem ipsum dolor sit amet
+                    consectetur, adipisicing elit. Architecto laboriosam
+                    deleniti aperiam ab veniam sint non cumque quis tempore
+                    cupiditate. Sint libero voluptas veniam at reprehenderit,
+                    veritatis harum et rerum.
+                  </p>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <div class="items-center hidden mt-12 md:flex">
-          <button
-            title="left arrow"
-            class="p-2 text-gray-800 transition-colors duration-300 border rounded-full rtl:-scale-x-100 hover:bg-gray-100"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-
-          <button
-            title="right arrow"
-            class="p-2 text-gray-800 transition-colors duration-300 border rounded-full rtl:-scale-x-100 lg:mx-6 hover:bg-gray-100"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
