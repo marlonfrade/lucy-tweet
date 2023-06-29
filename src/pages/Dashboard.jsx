@@ -1,4 +1,26 @@
+import { useEffect, useState } from "react";
+import { getDocs, collection, query, orderBy, limit } from "firebase/firestore";
+
+import { db } from "../firebase";
+
 const Dashboard = () => {
+  const [tweets, setTweets] = useState([]);
+  const postCollectionRef = collection(db, "tweets");
+
+  useEffect(() => {
+    const getPosts = async () => {
+      const q = query(postCollectionRef, orderBy("date", "desc"));
+      const data = await getDocs(q);
+      const dataParsed = data.docs.map((doc) => ({
+        ...doc.data(),
+      }));
+
+      setTweets(dataParsed);
+      console.log(dataParsed);
+    };
+
+    getPosts();
+  }, []);
   return (
     <section class="relative flex">
       <div class="min-h-screen bg-white md:w-3/4"></div>
@@ -11,93 +33,25 @@ const Dashboard = () => {
         </h1>
 
         <div class="grid w-full grid-cols-1 gap-8 mt-8 2xl:grid-cols-4 lg:mt-16 md:grid-cols-2 lg:grid-cols-3">
-          <div class="w-full p-8 bg-white rounded-md shadow-lg">
-            <p class="leading-loose text-gray-500 ">
-              “ Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit ea
-              tempora dolores qui eius pariatur odit ad voluptas iste, cum
-              accusantium beatae tempore quasi nesciunt distinctio. ”
-            </p>
+          {tweets.map((tweet) => {
+            return (
+              <div class="w-full p-8 bg-white rounded-md shadow-lg">
+                <p class="leading-loose text-gray-500 ">{tweet.message}</p>
 
-            <div class="flex items-center mt-6 -mx-2">
-              <img
-                class="object-cover mx-2 rounded-full w-14 h-14"
-                src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                alt=""
-              />
+                <div class="flex items-center mt-6 -mx-2">
+                  <img
+                    class="object-cover mx-2 rounded-full w-14 h-14"
+                    src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+                    alt=""
+                  />
 
-              <div class="mx-2">
-                <h1 class="font-semibold text-gray-800">Robbert</h1>
-                <span class="text-sm text-gray-500">
-                  CTO, Robert Consultency
-                </span>
+                  <div class="mx-2">
+                    <h1 class="font-semibold text-gray-800">{tweet.comment}</h1>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-
-          <div class="w-full p-8 bg-white rounded-md shadow-lg">
-            <p class="leading-loose text-gray-500 ">
-              “ Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit ea
-              tempora dolores qui eius pariatur odit ad voluptas iste, cum
-              accusantium beatae tempore quasi nesciunt distinctio. ”
-            </p>
-
-            <div class="flex items-center mt-6 -mx-2">
-              <img
-                class="object-cover mx-2 rounded-full w-14 h-14"
-                src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=761&q=80"
-                alt=""
-              />
-
-              <div class="mx-2">
-                <h1 class="font-semibold text-gray-800">Jeny Doe</h1>
-                <span class="text-sm text-gray-500">CEO, Jeny Consultency</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="w-full p-8 bg-white rounded-md shadow-lg md:hidden lg:block">
-            <p class="leading-loose text-gray-500">
-              “ Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit ea
-              tempora dolores qui eius pariatur odit ad voluptas iste, cum
-              accusantium beatae tempore quasi nesciunt distinctio. ”
-            </p>
-
-            <div class="flex items-center mt-6 -mx-2">
-              <img
-                class="object-cover mx-2 rounded-full w-14 h-14"
-                src="https://images.unsplash.com/photo-1499470932971-a90681ce8530?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                alt=""
-              />
-
-              <div class="mx-2">
-                <h1 class="font-semibold text-gray-800">Mia Brown</h1>
-                <span class="text-sm text-gray-500">
-                  Marketing Manager at Stech
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div class="w-full p-8 bg-white rounded-md shadow-lg md:hidden 2xl:block">
-            <p class="leading-loose text-gray-500">
-              “ Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit ea
-              tempora dolores qui eius pariatur odit ad voluptas iste, cum
-              accusantium beatae tempore quasi nesciunt distinctio. ”
-            </p>
-
-            <div class="flex items-center mt-6 -mx-2">
-              <img
-                class="object-cover mx-2 rounded-full w-14 h-14"
-                src="https://images.unsplash.com/photo-1488508872907-592763824245?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                alt=""
-              />
-
-              <div class="mx-2">
-                <h1 class="font-semibold text-gray-800">Lead Designer</h1>
-                <span class="text-sm text-gray-500">Developer at Stech</span>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
 
         <div class="items-center hidden mt-12 md:flex">

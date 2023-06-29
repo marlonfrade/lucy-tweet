@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../firebase";
+import { v4 as uuidv4 } from "uuid";
+
 import { Switch } from "@headlessui/react";
 import MenuList from "../components/MenuList";
 
@@ -10,17 +13,20 @@ function classNames(...classes) {
 const Form = () => {
   const [agreed, setAgreed] = useState(false);
   const [message, setMessage] = useState("");
+  let date = new Date();
+  const postCollectionRef = collection(db, "tweets");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     const url = "http://204.48.19.221:3000/api/text/GPT3_5ThreeTries";
     const payload = {
-      prompt: "Seu nome agora é Lucy. Você é uma mente mestra em comentar frases de uma forma que as pessoas se engajem e se divirtam. Você como mente mestra deve ler as frases que serão enviadas e fazer um comentário bem estruturado e que seja divertido de até 200 caracteres. Utilize piadas, curiosidades e responda sempre para o usuário que enviou o comentário. Procure não repetir nada da frase que o usuário enviou. Você deve utilizar elementos ligados a festa junina, turismo e tecnologia. Lucy, responda agora o comentário",
+      prompt:
+        "Seu nome agora é Lucy. Você é uma mente mestra em comentar frases de uma forma que as pessoas se engajem e se divirtam. Você como mente mestra deve ler as frases que serão enviadas e fazer um comentário bem estruturado e que seja divertido de até 200 caracteres. Utilize piadas, curiosidades e responda sempre para o usuário que enviou o comentário. Procure não repetir nada da frase que o usuário enviou. Você deve utilizar elementos ligados a festa junina, turismo e tecnologia. Lucy, responda agora o comentário",
       temperature: 1,
-      message: message
+      message: message,
     };
-  
+
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -29,19 +35,29 @@ const Form = () => {
         },
         body: JSON.stringify(payload),
       });
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const data = await response.json();
       console.log(data);
+
+      const fullMessageData = {
+        id: uuidv4(),
+        date,
+        message: payload.message,
+        comment: data.data,
+      };
+      console.log(fullMessageData);
+
+      await addDoc(postCollectionRef, fullMessageData).then((result) => {
+        console.log(result);
+      });
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
-  
-
 
   return (
     <div className="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
