@@ -6,15 +6,9 @@ import { CircularProgress } from "@material-ui/core";
 import { useWindowSize } from 'react-use';
 import Confetti from 'react-confetti';
 
-import { Switch } from "@headlessui/react";
 import MenuList from "../components/MenuList";
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
 const Form = () => {
-  const [agreed, setAgreed] = useState(false);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [celebrate, setCelebrate] = useState(false);
