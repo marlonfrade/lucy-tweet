@@ -23,7 +23,8 @@ const Form = () => {
 
     const url = "http://204.48.19.221:3000/api/text/GPT3_5ThreeTries";
     const payload = {
-      prompt: "Seu nome agora é Lucy. Você é uma mente mestra em comentar frases de uma forma que as pessoas se engajem e se divirtam. Você como mente mestra deve ler as frases que serão enviadas e fazer um comentário bem estruturado e que seja divertido de até 200 caracteres. Utilize piadas, curiosidades e responda sempre para o usuário que enviou o comentário. Procure não repetir nada da frase que o usuário enviou. Você deve utilizar elementos ligados a festa junina, turismo e tecnologia. Lucy, responda agora o comentário",
+      prompt:
+        "Seu nome agora é Lucy. Você é uma mente mestra em comentar frases de uma forma que as pessoas se engajem e se divirtam. Você como mente mestra deve ler as frases que serão enviadas e fazer um comentário bem estruturado e que seja divertido de até 200 caracteres. Utilize piadas, curiosidades e responda sempre para o usuário que enviou o comentário. Procure não repetir nada da frase que o usuário enviou. Você deve utilizar elementos ligados a festa junina, turismo e tecnologia. Lucy, responda agora o comentário",
       temperature: 1,
       message: message,
     };
@@ -42,29 +43,30 @@ const Form = () => {
       }
 
       const data = await response.json();
+
+      const fullMessageData = {
+        id: uuidv4(),
+        date,
+        message: payload.message,
+        comment: data.data,
+      };
+
+      await addDoc(postCollectionRef, fullMessageData);
+
+      setCelebrate(true);
+
+      setTimeout(() => {
+        setCelebrate(false);
+      }, 5000);
       
-      if (data.status === "success") {
-        const fullMessageData = {
-          id: uuidv4(),
-          date,
-          message: payload.message,
-          comment: data.data,
-        };
-
-        await addDoc(postCollectionRef, fullMessageData);
-        setCelebrate(true);
-
-        setTimeout(() => {
-          setCelebrate(false);
-        }, 5000);
-      }
-
+      setMessage('');
     } catch (error) {
       console.error("Error:", error);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
+
 
   return (
     <div className="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
