@@ -53,17 +53,20 @@ const Form = () => {
         };
 
         await addDoc(postCollectionRef, fullMessageData);
+
         setCelebrate(true);
 
         setTimeout(() => {
           setCelebrate(false);
         }, 5000);
+
+        setMessage("");
       }
     } catch (error) {
       console.error("Error:", error);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
