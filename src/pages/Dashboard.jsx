@@ -1,11 +1,93 @@
 import { useEffect, useState } from "react";
 import { getDocs, collection, query, orderBy, limit } from "firebase/firestore";
+import { motion } from "framer-motion";
 
 import { db } from "../firebase";
+
+import Piloto from "../assets/piloto.png";
+import Pilota from "../assets/pilota.png";
+import Mago from "../assets/mago.png";
+import LucyJunina from "../assets/lucy-junina.png";
+import LucyFesteira from "../assets/lucy-festeira.png";
+import Financeiro from "../assets/financeiro.png";
+import Financeira from "../assets/financeira.png";
+import TechMan from "../assets/tech-man.png";
+import TechWoman from "../assets/tech-woman.png";
+
+import ArraiaPlaca from "../assets/arraia-placa.png";
+
+const people = [
+  {
+    id: 1,
+    name: "Lucy Junina",
+    avatar: LucyJunina,
+  },
+  {
+    id: 2,
+    name: "Lucy Arraiá",
+    avatar: LucyFesteira,
+  },
+  {
+    id: 3,
+    name: "Piloto",
+    avatar: Piloto,
+  },
+  {
+    id: 4,
+    name: "Pilota",
+    avatar: Pilota,
+  },
+  {
+    id: 5,
+    name: "Mago",
+    avatar: Mago,
+  },
+  {
+    id: 6,
+    name: "Sr. Financeiro",
+    avatar: Financeiro,
+  },
+  {
+    id: 7,
+    name: "Sra. Financeira",
+    avatar: Financeira,
+  },
+  {
+    id: 8,
+    name: "Sr. Tech",
+    avatar: TechMan,
+  },
+  {
+    id: 9,
+    name: "Sra. Tech",
+    avatar: TechWoman,
+  },
+];
 
 const Dashboard = () => {
   const [tweets, setTweets] = useState([]);
   const postCollectionRef = collection(db, "tweets");
+
+  const getAvatarImage = (avatarId) => {
+    const data = people.find((element) => element.id === avatarId);
+    return (
+      <>
+        <img
+          className="w-24 h-24 rounded-full"
+          src={data?.avatar}
+          alt=""
+          width=""
+          height=""
+          loading="lazy"
+        />
+        <div>
+          <h6 className="text-xl sm:text-3xl font-medium text-gray-700">
+            {data?.name}
+          </h6>
+        </div>
+      </>
+    );
+  };
 
   useEffect(() => {
     const getPosts = async () => {
@@ -16,58 +98,75 @@ const Dashboard = () => {
       }));
 
       setTweets(dataParsed);
-      console.log(dataParsed);
     };
 
-    getPosts();
+    const intervalId = setInterval(getPosts, 5000);
+    return () => {
+      clearInterval(intervalId);
+    };
+
+    // getPosts();
   }, []);
+
   return (
-    <section className="w-full min-h-screen relative flex justify-center items-center bg-cover bg-[url('https://images.unsplash.com/photo-1465060810938-30bbe7c40e76?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2490&q=80')]">
-      <div className="py-16">
-        <div className="container m-auto px-6 text-gray-600 md:px-12 xl:px-6">
-          <div className="mb-20 space-y-4 px-6 md:px-0">
-            <h2 className="text-center text-2xl font-bold text-white md:text-8xl">
-              Arraiá da Firma!
-            </h2>
-          </div>
-          <div className="md:columns-2 lg:columns-3 gap-8 space-y-8">
-            {tweets.map((tweet) => {
-              return (
-                <div className="aspect-auto p-8 border border-gray-100 rounded-3xl bg-white shadow-2xl shadow-gray-600/10">
-                  <div className="flex gap-4">
-                    <img
-                      className="w-12 h-12 rounded-full"
-                      src="https://pbs.twimg.com/profile_images/1372441824560771075/DTcuXT0Z_400x400.jpg"
-                      alt=""
-                      width=""
-                      height=""
-                      loading="lazy"
-                    />
-                    <div>
-                      <h6 className="text-lg font-medium text-gray-700">
-                        Lucy
-                      </h6>
-                      <p className="text-sm text-gray-500">Mobile dev</p>
-                    </div>
-                  </div>
+    <section className="w-full min-h-screen py-4 sm:py-10 relative flex justify-center items-center bg-cover bg-fixed bg-[url('/img/dashboard-bg.png')]">
+      <div className="sm:container px-6 text-gray-600 md:px-12 xl:px-6">
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          whileInView={{
+            opacity: 1,
+            scale: 1,
+            transition: {
+              type: "spring",
+              delay: 0.2,
+            },
+          }}
+          className="flex justify-center items-center mb-8"
+        >
+          <img
+            src={ArraiaPlaca}
+            alt=""
+            width="300"
+            height="300"
+            loading="lazy"
+          />
+        </motion.div>
+        <div className="grid gap-x-4 gap-y-6 sm:grid-cols-2 md:gap-x-6 lg:grid-cols-3">
+          {tweets.map((tweet) => {
+            return (
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                whileInView={{
+                  opacity: 1,
+                  scale: 1,
+                  transition: {
+                    type: "tween",
+                  },
+                }}
+                key={tweet.id}
+                className="h-full p-8 border border-gray-100 rounded-3xl bg-white shadow-2xl shadow-gray-600/10"
+              >
+                <div className="flex items-center mb-4 gap-4">
+                  {getAvatarImage(tweet.avatar)}
+                </div>
+                <div className="flex space-x-4">
                   <img
                     src="https://tuk-cdn.s3.amazonaws.com/can-uploader/testimonials-4-svg1.svg"
                     alt="commas"
                   />
-                  <p className="mt-8">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Illum aliquid quo eum quae quos illo earum ipsa doloribus
-                    nostrum minus libero aspernatur laborum cum, a suscipit,
-                    ratione ea totam ullam! Lorem ipsum dolor sit amet
-                    consectetur, adipisicing elit. Architecto laboriosam
-                    deleniti aperiam ab veniam sint non cumque quis tempore
-                    cupiditate. Sint libero voluptas veniam at reprehenderit,
-                    veritatis harum et rerum.
-                  </p>
+                  <h2 className="text-xl sm:text-3xl text-bold text-gray-950 mt-4">
+                    {tweet.message}
+                  </h2>
                 </div>
-              );
-            })}
-          </div>
+                <p className="mt-8 italic sm:text-xl text-gray-500">
+                  Comentário da Lucy:
+                </p>
+                <p className="mt-2 italic sm:text-xl">
+                  &quot;{tweet.comment}&quot;
+                </p>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
