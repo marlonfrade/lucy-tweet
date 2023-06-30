@@ -34,7 +34,7 @@ const people = [
   },
   {
     id: 4,
-    name: "Pilota",
+    name: "Comissário de Bordo",
     avatar: Pilota,
   },
   {

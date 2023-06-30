@@ -9,17 +9,6 @@ import { getFirestore } from "firebase/firestore";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
-// lucy-tweet
-// const firebaseConfig = {
-//   apiKey: "AIzaSyD3b9ZJNuPc3IRtSaxQAy5FmADhiIg_sIA",
-//   authDomain: "lucy-tweet.firebaseapp.com",
-//   projectId: "lucy-tweet",
-//   storageBucket: "lucy-tweet.appspot.com",
-//   messagingSenderId: "505107626870",
-//   appId: "1:505107626870:web:affbb87ff47678dc5f1857",
-//   measurementId: "G-3KBLG79WLH",
-// };
-
 // lucy-tweets
 // const firebaseConfig = {
 //   apiKey: "AIzaSyC91Fg_d39WKKW6Mzc7K-JgZ6ayKib7n1M",
@@ -32,14 +21,25 @@ import { getFirestore } from "firebase/firestore";
 // };
 
 // lucy-tweet-tests
+// const firebaseConfig = {
+//   apiKey: "AIzaSyC5ihn709CQpbse4YlGwqD0XeaD1tPWfLs",
+//   authDomain: "lucy-tweet-tests.firebaseapp.com",
+//   projectId: "lucy-tweet-tests",
+//   storageBucket: "lucy-tweet-tests.appspot.com",
+//   messagingSenderId: "884626548751",
+//   appId: "1:884626548751:web:6878a9d10f600b23e49b7a",
+//   measurementId: "G-W2HWH6J6VZ",
+// };
+
+// lucy-test
 const firebaseConfig = {
-  apiKey: "AIzaSyC5ihn709CQpbse4YlGwqD0XeaD1tPWfLs",
-  authDomain: "lucy-tweet-tests.firebaseapp.com",
-  projectId: "lucy-tweet-tests",
-  storageBucket: "lucy-tweet-tests.appspot.com",
-  messagingSenderId: "884626548751",
-  appId: "1:884626548751:web:6878a9d10f600b23e49b7a",
-  measurementId: "G-W2HWH6J6VZ",
+  apiKey: "AIzaSyAwehoTgKpEYn9eL9p-EX3tehKRk8AI3hw",
+  authDomain: "lucy-test-75403.firebaseapp.com",
+  projectId: "lucy-test-75403",
+  storageBucket: "lucy-test-75403.appspot.com",
+  messagingSenderId: "461739404389",
+  appId: "1:461739404389:web:4015ffb4923b047459ea8c",
+  measurementId: "G-8VJM5HL534",
 };
 
 // Initialize Firebase

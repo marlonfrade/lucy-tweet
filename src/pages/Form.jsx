@@ -1,10 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../firebase";
 import { v4 as uuidv4 } from "uuid";
-import { CircularProgress } from "@material-ui/core";
 import { useWindowSize } from "react-use";
 import Confetti from "react-confetti";
+
+import Typography from "@mui/material/Typography";
+import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { CircularProgress } from "@mui/material";
 
 import MenuList from "../components/MenuList";
 
@@ -17,6 +27,8 @@ import Financeiro from "../assets/financeiro.png";
 import Financeira from "../assets/financeira.png";
 import TechMan from "../assets/tech-man.png";
 import TechWoman from "../assets/tech-woman.png";
+
+const modalOptions = ["Sim", "Não"];
 
 const people = [
   {
@@ -36,7 +48,7 @@ const people = [
   },
   {
     id: 4,
-    name: "Pilota",
+    name: "Comissário de Bordo",
     avatar: Pilota,
   },
   {
@@ -71,14 +83,58 @@ const Form = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [celebrate, setCelebrate] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [modalForm, setModalForm] = useState({
+    firstQuestion: "",
+    secondQuestion: "",
+  });
+  const [modalError, setModalError] = useState(false);
+  const [modalLoading, setModalLoading] = useState(false);
+  const isFormAnswered = localStorage.getItem("is_form_answered") || false;
 
   let date = new Date();
-  const postCollectionRef = collection(db, "tweets");
+  const tweetsCollectionRef = collection(db, "tweets");
+  const formCollectionRef = collection(db, "questions");
   const { width, height } = useWindowSize();
 
+  const handleAgree = async () => {
+    console.log(modalForm);
+
+    if (!modalForm.firstQuestion.length || !modalForm.secondQuestion.length) {
+      setModalError(true);
+    } else {
+      setModalError(false);
+      setModalLoading(true);
+      try {
+        const formData = {
+          isUserSatisfied: modalForm.firstQuestion,
+          suggestion: modalForm.secondQuestion,
+        };
+        await addDoc(formCollectionRef, formData);
+        localStorage.setItem("is_form_answered", true);
+        setOpenModal(false);
+        setModalForm({
+          firstQuestion: "",
+          secondQuestion: "",
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setModalForm({
+          firstQuestion: "",
+          secondQuestion: "",
+        });
+      }
+    }
+  };
+
   const handleSubmit = async (event) => {
-    const avatarId = selected.id;
     event.preventDefault();
+    if (!message.length) {
+      alert("Insira uma mensagem");
+      return;
+    }
+    const avatarId = selected.id;
     setLoading(true);
 
     const url =
@@ -114,7 +170,7 @@ const Form = () => {
           avatar: avatarId,
         };
 
-        await addDoc(postCollectionRef, fullMessageData);
+        await addDoc(tweetsCollectionRef, fullMessageData);
 
         setCelebrate(true);
 
@@ -131,6 +187,12 @@ const Form = () => {
     }
   };
 
+  useEffect(() => {
+    if (!isFormAnswered) {
+      setOpenModal(true);
+    }
+  }, []);
+
   return (
     <div className="isolate min-h-screen bg-white px-6 py-24 sm:py-32 lg:px-8">
       {celebrate && <Confetti width={width} height={height} />}
@@ -144,7 +206,7 @@ const Form = () => {
         </h2>
         <p className="mt-2 text-md leading-8 text-gray-600">
           Compartilhe suas ideias e opiniões sobre o trabalho em equipe de
-          maneira interativa!
+          maneira criativa!
         </p>
       </div>
       <form
@@ -197,6 +259,59 @@ const Form = () => {
           </div>
         </div>
       </form>
+      <Dialog open={openModal}>
+        <DialogTitle>Formulário</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Para utilizar nosso correio elegante digital, você só precisa
+            responder essas duas perguntas rápidas:
+          </DialogContentText>
+          <Typography variant="subtitle1" gutterBottom mt={2}>
+            Você se sente valorizado pela empresa e por seus líderes?
+          </Typography>
+          <TextField
+            error={modalError}
+            select
+            label="Selecione"
+            fullWidth
+            defaultValue=""
+            onChange={(e) => {
+              setModalForm({ ...modalForm, firstQuestion: e.target.value });
+            }}
+          >
+            {modalOptions.map((option, id) => (
+              <MenuItem key={id} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+          <Typography variant="subtitle1" gutterBottom mt={2}>
+            Sugira ações e/ou medidas que possam colaborar para o clima
+            organizacional do escritório.
+          </Typography>
+          <TextField
+            error={modalError}
+            label="O que você sugere?"
+            multiline
+            fullWidth
+            outline="none"
+            maxRows={10}
+            variant="outlined"
+            helperText="* Este é um espaço seguro e as mensagens/respostas são anônimas"
+            value={modalForm.secondQuestion}
+            onChange={(e) =>
+              setModalForm({ ...modalForm, secondQuestion: e.target.value })
+            }
+          />
+        </DialogContent>
+        <DialogActions>
+          {modalLoading ? (
+            <CircularProgress size={20} />
+          ) : (
+            <Button onClick={handleAgree}>Enviar</Button>
+          )}
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
